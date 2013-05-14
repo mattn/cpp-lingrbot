@@ -59,8 +59,13 @@ struct cpp_bot {
       }
     }
 
+    std::string ret = data.str();
+    size_t e = ret.find_last_not_of(" ¥t¥r¥n");
+    if (e != string::npos) {
+      ret = string(ret, 0, e);
+    }
     response = server::response::stock_reply(
-      server::response::ok, data.str()
+      server::response::ok, ret
     );
   }
 
