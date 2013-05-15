@@ -1,12 +1,13 @@
 #include <boost/network/include/http/server.hpp>
 #include <picojson.h>
 
+namespace http = boost::network::http;
+
 struct cpp_bot {
-  typedef boost::network::http::server<cpp_bot> server;
+  typedef http::server<cpp_bot> server;
 
   void
   operator ()(server::request const &request, server::response &response) {
-    namespace http = boost::network::http;
     typedef server::string_type string;
     string body = request.body;
     std::ostringstream data;
@@ -84,7 +85,7 @@ main(){
   auto port = "11614";
   try{
     cpp_bot handler;
-    server server_(address, port, handler);
+    server server_(address, port, handler, http::_reuse_address=true);
     server_.run();
   }
   catch(std::exception& e){
