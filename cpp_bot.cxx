@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include <boost/network/include/http/server.hpp>
 #include <picojson.h>
 
@@ -79,13 +80,16 @@ struct cpp_bot {
 
 int
 main(){
+  const char* p = std::getenv("PORT");
   typedef cpp_bot::server server;
   
   auto address = "localhost";
-  auto port = "11614";
+  auto port = p ? p : "80";
+
   try{
     cpp_bot handler;
     server server_(address, port, handler, http::_reuse_address=true);
+    std::cout << address << ":" << port << " started" << std::endl;
     server_.run();
   }
   catch(std::exception& e){
